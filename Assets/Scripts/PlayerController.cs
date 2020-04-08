@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public float moveSpeed = 5f;
+    public float acceleration = 5f;
     public float jumpForce = 5f;
 
     private bool isJump = false;
@@ -26,16 +27,31 @@ public class PlayerController : MonoBehaviour
         
     }
 
-    // Update is called once per frame
-    void Update()
-    {
+    private void Update() {
         if(Input.GetButtonDown("Jump")) {
             Jump();
+        }        
+    }
+
+    // Update is called once per frame
+    void FixedUpdate ()
+    {
+        float movement = Input.GetAxis("Horizontal");
+        Vector2 movementVec = new Vector2(movement, 0f);
+        rigidbody.AddForce(movementVec * acceleration);
+
+        if(rigidbody.velocity.x > moveSpeed) {
+            Vector2 vectorClamp = rigidbody.velocity;
+            vectorClamp.x = moveSpeed;
+            rigidbody.velocity = vectorClamp;
         }
 
-        float movement = Input.GetAxis("Horizontal");
-        Vector3 movementVec = new Vector3(movement, 0f, 0f);
-        transform.position += movementVec * Time.deltaTime * moveSpeed;
+        else if(rigidbody.velocity.x < -moveSpeed) {
+            Vector2 vectorClamp = rigidbody.velocity;
+            vectorClamp.x = -moveSpeed;
+            rigidbody.velocity = vectorClamp;
+        }
+
 
         if (movement > 0 && !m_FacingRight)
         {
@@ -74,7 +90,7 @@ public class PlayerController : MonoBehaviour
     private void Jump()
     {
         if(grounded.isGrounded == true) {
-            rigidbody.AddForce(new Vector2(0f, jumpForce), ForceMode2D.Impulse);
+            rigidbody.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
             isJump = true;
         }
         
