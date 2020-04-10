@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: c630e8b368076304283033550ab265a8
+guid: ac2c293af182fa6408b351e578e4dd27
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -13,9 +13,9 @@ TrueTypeFontImporter:
   - Pixograd
   fallbackFontReferences: []
   customCharacters: 
-  fontRenderingMode: 2
+  fontRenderingMode: 0
   ascentCalculationMode: 1
-  useLegacyBoundsCalculation: 1
+  useLegacyBoundsCalculation: 0
   shouldRoundAdvanceValue: 1
   userData: 
   assetBundleName: 
