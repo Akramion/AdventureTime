@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
     private bool m_FacingRight = true;
     private Grounded grounded;
     private Rigidbody2D rigidbody;
+    private float movement;
 
     private void Awake() {
         rigidbody = gameObject.GetComponent<Rigidbody2D>();
@@ -30,13 +31,37 @@ public class PlayerController : MonoBehaviour
     private void Update() {
         if(Input.GetButtonDown("Jump")) {
             Jump();
-        }        
+        }     
+
+// Animations
+        if(movement == 0) {
+            animator.SetBool("isWalk", false);
+        }
+
+        else {
+            animator.SetBool("isWalk", true);
+        }
+
+        if(isJump == true && rigidbody.velocity.y > 0) {
+            animator.SetBool("isJump", true);
+        }
+
+        else if(rigidbody.velocity.y < 0) {
+            animator.SetBool("isFall", true);
+            animator.SetBool("isJump", false);
+        }
+
+        else if(isJump == true && rigidbody.velocity.y == 0) {
+            animator.SetBool("isFall", false);
+            animator.SetBool("isJump", false);
+            animator.SetBool("isGround", true);
+        }   
     }
 
     // Update is called once per frame
     void FixedUpdate ()
     {
-        float movement = Input.GetAxis("Horizontal");
+        movement = Input.GetAxis("Horizontal");
         Vector2 movementVec = new Vector2(movement, 0f);
         rigidbody.AddForce(movementVec * acceleration);
 
@@ -62,29 +87,7 @@ public class PlayerController : MonoBehaviour
             Flip();
         }
 
-// Animations
-        if(movement == 0) {
-            animator.SetBool("isWalk", false);
-        }
 
-        else {
-            animator.SetBool("isWalk", true);
-        }
-
-        if(isJump == true && rigidbody.velocity.y > 0) {
-            animator.SetBool("isJump", true);
-        }
-
-        else if(rigidbody.velocity.y < 0) {
-            animator.SetBool("isFall", true);
-            animator.SetBool("isJump", false);
-        }
-
-        else if(isJump == true && rigidbody.velocity.y == 0) {
-            animator.SetBool("isFall", false);
-            animator.SetBool("isJump", false);
-            animator.SetBool("isGround", true);
-        }
     }
 
     private void Jump()
