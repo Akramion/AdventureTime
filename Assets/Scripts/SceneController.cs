@@ -5,9 +5,16 @@ using UnityEngine.SceneManagement;
 
 public class SceneController : MonoBehaviour
 {
-    public void LoadLevel(string sceneName)
-    {
-        SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
+    public int level = 0;
+
+    private void Awake() {
+        DontDestroyOnLoad(this);
+    }
+
+    public void NextLevel() {
+        level++;
+        Debug.Log("Level_1" + level);
+        SceneManager.LoadScene("Level_" + level, LoadSceneMode.Single);
     }
 
     public void EndGame() {

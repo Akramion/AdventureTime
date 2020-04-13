@@ -23,7 +23,6 @@ public class BackgroundScrolling : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log((startPosition.y - transform.position.y).ToString());
         if (startPosition.y - transform.position.y >= scrollHeight)
         {
             transform.position = startPosition;
