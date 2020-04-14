@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SawController : MonoBehaviour
 {
@@ -13,7 +14,7 @@ public class SawController : MonoBehaviour
     int waypointIndex = 0;
     private SceneController sceneController;
     private void Awake() {
-        sceneController = GameObject.Find("Main Camera").GetComponent<SceneController>();
+        sceneController = GameObject.Find("SceneController").GetComponent<SceneController>();
     }
 
     private void Start() {
@@ -44,7 +45,7 @@ public class SawController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collider) {
         if(collider.tag == "Player") {
-            sceneController.EndGame();
+            sceneController.RestartLevel();
         }
     }
 }

@@ -17,7 +17,7 @@ public class SceneController : MonoBehaviour
         SceneManager.LoadScene("Level_" + level, LoadSceneMode.Single);
     }
 
-    public void EndGame() {
-        SceneManager.LoadScene("Level_1", LoadSceneMode.Single);
+    public void RestartLevel() {
+       SceneManager.LoadScene("Level_" + level, LoadSceneMode.Single);
     }
 }
