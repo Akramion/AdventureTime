@@ -22,12 +22,14 @@ public class SawController : MonoBehaviour
     }
 
     private void Update() {
-        Move();
+        if(waypoints[0]) {
+            Move();
+        }
+        
     }
 
     private void Move() {
         transform.position = Vector2.MoveTowards(transform.position, waypoints[waypointIndex].transform.position, moveSpeed * Time.deltaTime);
-        Debug.Log(waypointIndex);
 
 
 
