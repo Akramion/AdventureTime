@@ -16,29 +16,32 @@ public class RatingTable : MonoBehaviour
         ratingController = GameObject.Find("Supervisor").GetComponent<RatingController>();
         container = transform.Find("Scroll View/Viewport/Content");
 
-        fillTable();
+        FillTable();
     }
 
-    public void fillTable()
+    public void FillTable()
     {
         // заполняем таблицу записями из рейтинга
-        for (int i = 0; i < ratingController.records.Count; i++)
+        int i = 0;
+        foreach (string playerName in ratingController.rating.Keys)
         {
-            RatingController.RecordData recordData = ratingController.records[i];
+            RatingController.RecordData recordData = ratingController.rating[i] as RatingController.RecordData;
             GameObject tableRecord = Instantiate(ratingRecordPrefab, container);
 
             Text place = tableRecord.transform.Find("Place").GetComponent<Text>();
             place.text = (i + 1).ToString();
 
             Text name = tableRecord.transform.Find("Name").GetComponent<Text>();
-            name.text = recordData.name;
+            name.text = playerName;
 
             Text score = tableRecord.transform.Find("Score").GetComponent<Text>();
-            score.text = recordData.score.ToString();
+            score.text = recordData.totalScore.ToString();
+
+            i++;
         }
     }
 
-    public void clearTable()
+    public void ClearTable()
     {
         // очищаем таблицу
         foreach (Transform child in container)
