@@ -17,10 +17,18 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rigidbody;
     private float movement;
 
+    private Camera camera;
+    private Vector3 outsidePlayer;
+    private SceneController sceneController;
+
     private void Awake() {
         rigidbody = gameObject.GetComponent<Rigidbody2D>();
         animator = gameObject.GetComponent<Animator>();
-        grounded = gameObject.transform.Find("Grounded").gameObject.GetComponent<Grounded>();
+        grounded = GameObject.Find("Grounded").gameObject.GetComponent<Grounded>();
+
+        camera = GameObject.Find("Main Camera").gameObject.GetComponent<Camera>();
+        sceneController = GameObject.Find("SceneController").GetComponent<SceneController>();
+        
     }
 
     void Start()
@@ -32,6 +40,11 @@ public class PlayerController : MonoBehaviour
         if(Input.GetButtonDown("Jump")) {
             Jump();
         }     
+
+        Vector3 outsidePlayer = camera.WorldToViewportPoint(transform.position);
+        if(outsidePlayer.y < 0f) {
+            sceneController.RestartLevel();
+        }
 
 // Animations
         if(movement == 0) {
