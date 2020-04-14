@@ -13,7 +13,7 @@ public class SceneController : MonoBehaviour
 
     public void NextLevel() {
         level++;
-        Debug.Log("Level_1" + level);
+        Debug.Log("Level_" + level);
         SceneManager.LoadScene("Level_" + level, LoadSceneMode.Single);
     }
 
