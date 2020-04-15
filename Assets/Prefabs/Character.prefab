@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 7788621770193914330}
   m_Layer: 8
   m_Name: Grounded
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -289,7 +289,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 7
-  acceleration: 35
+  acceleration: 100
   jumpForce: 10
 --- !u!95 &7788621770308985355
 Animator:

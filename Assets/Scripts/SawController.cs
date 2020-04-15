@@ -18,11 +18,13 @@ public class SawController : MonoBehaviour
     }
 
     private void Start() {
-        transform.position = waypoints[waypointIndex].transform.position;
+        if(waypoints.Length > 0) {
+            transform.position = waypoints[waypointIndex].transform.position;
+        }
     }
 
     private void Update() {
-        if(waypoints[0]) {
+        if(waypoints.Length > 0) {
             Move();
         }
         
@@ -40,9 +42,6 @@ public class SawController : MonoBehaviour
         if(waypointIndex == waypoints.Length) {
             waypointIndex = 0;
         }
-
-        Debug.Log(transform.position);
-        Debug.Log(waypoints[waypointIndex].transform.position);
 }
 
     private void OnTriggerEnter2D(Collider2D collider) {
