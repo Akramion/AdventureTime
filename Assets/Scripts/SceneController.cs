@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class SceneController : MonoBehaviour
 {
     public int level = 0;
+    public bool isHard = false;
 
     private void Awake() {
         DontDestroyOnLoad(this);
@@ -14,10 +15,30 @@ public class SceneController : MonoBehaviour
     public void NextLevel() {
         level++;
         Debug.Log("Level_" + level);
-        SceneManager.LoadScene("Level_" + level, LoadSceneMode.Single);
+
+        if (isHard)
+        {
+            SceneManager.LoadScene("Level_Hard_" + level, LoadSceneMode.Single);
+        }
+        else
+        {
+            SceneManager.LoadScene("Level_Easy_" + level, LoadSceneMode.Single);
+        }
     }
 
     public void RestartLevel() {
-       SceneManager.LoadScene("Level_" + level, LoadSceneMode.Single);
+        if (isHard)
+        {
+            SceneManager.LoadScene("Level_Hard_" + level, LoadSceneMode.Single);
+        }
+        else
+        {
+            SceneManager.LoadScene("Level_Easy_" + level, LoadSceneMode.Single);
+        }
+    }
+
+    public void SetDificulty(bool isHard)
+    {
+        this.isHard = isHard;
     }
 }
