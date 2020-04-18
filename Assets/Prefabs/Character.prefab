@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 7788621770193914330}
   m_Layer: 8
   m_Name: Grounded
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -47,7 +47,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.03870225, y: -0.37385502}
+  m_Offset: {x: 0.02538538, y: -0.37385502}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -58,8 +58,8 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.47384024, y: 0.009574592}
-  m_EdgeRadius: 0
+  m_Size: {x: 0.5568361, y: 0.009574592}
+  m_EdgeRadius: 0.003
 --- !u!114 &7788621770193914332
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -263,7 +263,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.03567648, y: 0.004172206}
+  m_Offset: {x: 0.025348425, y: 0.004172206}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -274,7 +274,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.6569729, y: 0.74748635}
+  m_Size: {x: 0.5909562, y: 0.74748635}
   m_EdgeRadius: 0
 --- !u!114 &7788621770308985344
 MonoBehaviour:
