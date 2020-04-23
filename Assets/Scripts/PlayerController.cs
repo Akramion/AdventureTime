@@ -20,6 +20,9 @@ public class PlayerController : MonoBehaviour
     private Camera camera;
     private Vector3 outsidePlayer;
     private SceneController sceneController;
+    private CanvasDontDestroy canvasDontDestroy;
+
+    
 
     private void Awake() {
         rigidbody = gameObject.GetComponent<Rigidbody2D>();
@@ -31,8 +34,10 @@ public class PlayerController : MonoBehaviour
         
     }
 
-    void Start()
-    {
+    private void Start() {
+        canvasDontDestroy = GameObject.Find("BlackoutCanvas").GetComponent<CanvasDontDestroy>();
+        canvasDontDestroy.CameraAttach();
+        
         
     }
 
