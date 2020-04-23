@@ -1,0 +1,28 @@
+[33mc92b414[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m)[m HEAD@{0}: reset: moving to c92b414
+[33mf1090dd[m[33m ([m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{1}: pull --progress origin: Fast-forward
+[33m14cda74[m HEAD@{2}: reset: moving to HEAD~1
+[33mc92b414[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m)[m HEAD@{3}: reset: moving to HEAD
+[33mc92b414[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m)[m HEAD@{4}: commit: Player creation
+[33m14cda74[m HEAD@{5}: commit: Start with main menu
+[33m7205d4f[m HEAD@{6}: commit (merge): Run levels with different difficulties
+[33me24f374[m HEAD@{7}: commit: Level difficulty selection
+[33mb55b078[m HEAD@{8}: pull: Merge made by the 'recursive' strategy.
+[33m166cf7b[m HEAD@{9}: commit: Merge game and menu
+[33m1b880ef[m HEAD@{10}: commit (merge): Merge game and menu
+[33mdda89eb[m HEAD@{11}: commit: Multilevel rating system
+[33m17ff1e9[m HEAD@{12}: commit: Multilevel rating system
+[33m2572ff6[m HEAD@{13}: reset: moving to 2572ff6
+[33m0859941[m HEAD@{14}: reset: moving to 0859941
+[33m2572ff6[m HEAD@{15}: reset: moving to 2572ff6
+[33m2572ff6[m HEAD@{16}: reset: moving to HEAD
+[33m2572ff6[m HEAD@{17}: reset: moving to HEAD
+[33m2572ff6[m HEAD@{18}: reset: moving to HEAD
+[33m2572ff6[m HEAD@{19}: reset: moving to HEAD
+[33m2572ff6[m HEAD@{20}: commit: Rating table and rating controller
+[33mebf2864[m HEAD@{21}: commit: Background inside levels
+[33m69efd9f[m HEAD@{22}: pull: Merge made by the 'recursive' strategy.
+[33m0859941[m HEAD@{23}: commit: Scrolling background
+[33m8e1166e[m HEAD@{24}: commit: Menu and level connection
+[33mc787631[m HEAD@{25}: commit (merge): Menu
+[33m2616609[m HEAD@{26}: commit: Menu
+[33m49e28c8[m HEAD@{27}: clone: from https://github.com/Akramion/AdventureTime.git
