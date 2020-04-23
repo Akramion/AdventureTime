@@ -37,6 +37,11 @@ public class SceneController : MonoBehaviour
         }
     }
 
+    public void SetLevel(int levelIndex)
+    {
+        level = levelIndex;
+    }
+
     public void SetDificulty(bool isHard)
     {
         this.isHard = isHard;
