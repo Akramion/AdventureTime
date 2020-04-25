@@ -9,11 +9,11 @@ public class RatingController : MonoBehaviour
     [SerializeField]
     private string fileName;
 
-    // рейтинг учитывает topSize лучших игроков
-    [SerializeField]
-    private int topSize;
+    public static int easyLevelsCount = 10;
+    public static int levels = 20;
 
-    private static int levels = 5;
+    public string curPlayerName = "Nosik";
+    public bool recalculateTable = true;
 
     // отсортированные записи таблицы рейтинга
     public OrderedDictionary rating = new OrderedDictionary();
@@ -76,7 +76,6 @@ public class RatingController : MonoBehaviour
         AddPlayer("Keny");
         AddPlayer("Shushkan");
         AddPlayer("Ruport");
-        AddPlayer("Keks");
         AddPlayer("Jiga");
 
         RecalculateRating(1, "CR@zy d0g", 100);
@@ -101,6 +100,7 @@ public class RatingController : MonoBehaviour
             return false;
 
         rating.Add(playerName, new RecordData());
+        recalculateTable = true;
         return true;
     }
 
@@ -141,18 +141,19 @@ public class RatingController : MonoBehaviour
                 rating.Remove(playerName);
                 // перенесем данные на новую позицию в рейтинге
                 rating.Insert(insertIndex, playerName, updatedRecord);
+                recalculateTable = true;
             }
         }
     }
 
-    public void ClearRecords()
+    public void Clear()
     {
         rating.Clear();
     }
 
     private void LoadFromFile()
     {
-        ClearRecords();
+        Clear();
 
         string filePath = Application.persistentDataPath + "/" + fileName;
         Debug.Log(filePath);
@@ -193,5 +194,10 @@ public class RatingController : MonoBehaviour
         }
 
         File.WriteAllText(filePath, saveText);
+    }
+
+    void OnApplicationQuit()
+    {
+        SaveToFile();
     }
 }

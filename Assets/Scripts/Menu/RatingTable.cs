@@ -11,16 +11,28 @@ public class RatingTable : MonoBehaviour
     [SerializeField]
     private GameObject ratingRecordPrefab;
     
-    void Start()
+    void Awake()
     {
-        ratingController = GameObject.Find("Supervisor").GetComponent<RatingController>();
+        ratingController = GameObject.Find("SceneController").GetComponent<RatingController>();
         container = transform.Find("Scroll View/Viewport/Content");
+    }
 
+    void OnEnable()
+    {
         FillTable();
     }
 
     public void FillTable()
     {
+        // обновляем таблицу, только когда в рейтинге есть изменения
+        if (!ratingController.recalculateTable)
+            return;
+
+        ratingController.recalculateTable = false;
+
+        // чистим таблицу
+        ClearTable();
+
         // заполняем таблицу записями из рейтинга
         int i = 0;
         foreach (string playerName in ratingController.rating.Keys)
@@ -44,6 +56,7 @@ public class RatingTable : MonoBehaviour
     public void ClearTable()
     {
         // очищаем таблицу
+        Debug.Log(container);
         foreach (Transform child in container)
         {
             Destroy(child.gameObject);
