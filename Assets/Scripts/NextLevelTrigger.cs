@@ -13,7 +13,6 @@ public class NextLevelTrigger : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collider) {
         if(collider.tag == "Player") {
-            sceneController.NextLevel();
             sceneController.TurnOfButtons();
             sceneController.SetBlackot();
         }

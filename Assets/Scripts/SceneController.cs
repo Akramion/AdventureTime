@@ -131,6 +131,7 @@ public class SceneController : MonoBehaviour
     }
 
     private void ShowTransition() {
+        Debug.Log("asd");
         if(alphaATransition < 1) {
             alphaATransition += 0.7f * Time.deltaTime;
 
