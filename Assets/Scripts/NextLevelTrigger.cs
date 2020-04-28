@@ -6,8 +6,8 @@ public class NextLevelTrigger : MonoBehaviour
 {
     private void OnTriggerEnter2D(Collider2D collider) {
         if(collider.tag == "Player") {
-            sceneController.TurnOfButtons();
-            sceneController.SetBlackot();
+            SceneController sceneController = GameObject.Find("SceneController").GetComponent<SceneController>();
+            sceneController.OpenTransitionPanel();
 
             // Выключения звука передвижения в конце уровня
             FindObjectOfType<SoundManager>().StopSound("movement");

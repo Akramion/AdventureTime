@@ -19,6 +19,8 @@ public class SceneController : MonoBehaviour
     public static int hardLevelsCount = 10;
     public static int totalLevelsCount = easyLevelsCount + hardLevelsCount;
 
+    private ScoreController score;
+
     private void Awake()
     {
         DontDestroyOnLoad(this);
@@ -32,7 +34,7 @@ public class SceneController : MonoBehaviour
 
         DontDestroyOnLoad(gameCanvas);
         DontDestroyOnLoad(transitionCanvas);
-        score = GameObject.Find("Score").GetComponent<ScoreController>();
+        // score = GameObject.Find("Score").GetComponent<ScoreController>();
     }
 
     public void NextLevel()
@@ -61,7 +63,7 @@ public class SceneController : MonoBehaviour
         // если канвас со счетом не включен, то включаем его
         gameCanvas.SetActive(true);
 
-        score.ResetScore();
+        // score.ResetScore();
         
         if (isHard)
         {

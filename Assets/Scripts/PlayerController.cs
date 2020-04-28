@@ -20,12 +20,9 @@ public class PlayerController : MonoBehaviour
     private Camera camera;
     private Vector3 outsidePlayer;
     private SceneController sceneController;
-    private CanvasDontDestroy canvasDontDestroy;
 
     SoundManager soundManager;
 
-
-    
 
     private void Awake() {
         rigidbody = gameObject.GetComponent<Rigidbody2D>();
@@ -34,6 +31,8 @@ public class PlayerController : MonoBehaviour
 
         camera = GameObject.Find("Main Camera").gameObject.GetComponent<Camera>();
         sceneController = GameObject.Find("SceneController").GetComponent<SceneController>();
+
+        soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
     }
 
     private void Update() {
