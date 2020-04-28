@@ -32,10 +32,13 @@ public class SceneController : MonoBehaviour
 
         DontDestroyOnLoad(gameCanvas);
         DontDestroyOnLoad(transitionCanvas);
+        score = GameObject.Find("Score").GetComponent<ScoreController>();
     }
 
     public void NextLevel()
     {
+        // score.ResetScore();
+
         // мы переходим в меню, если все уровни в той или иной сложности (легкой или сложной) пройдены
         if ((isHard && (level == hardLevelsCount)) || (!isHard && (level == easyLevelsCount)))
         {
@@ -58,6 +61,8 @@ public class SceneController : MonoBehaviour
         // если канвас со счетом не включен, то включаем его
         gameCanvas.SetActive(true);
 
+        score.ResetScore();
+        
         if (isHard)
         {
             SceneManager.LoadScene("Level_Hard_" + level, LoadSceneMode.Single);

@@ -4,15 +4,13 @@ using UnityEngine;
 
 public class NextLevelTrigger : MonoBehaviour
 {
-    private void OnTriggerEnter2D(Collider2D collider)
-    {
-        // игрок добрался до конца уровня
-        if (collider.tag == "Player")
-        {
-            // включаем промежуточную панель
-            SceneController sceneController = GameObject.Find("SceneController").GetComponent<SceneController>();
-            sceneController.OpenTransitionPanel();
+    private void OnTriggerEnter2D(Collider2D collider) {
+        if(collider.tag == "Player") {
+            sceneController.TurnOfButtons();
+            sceneController.SetBlackot();
 
+            // Выключения звука передвижения в конце уровня
+            FindObjectOfType<SoundManager>().StopSound("movement");
             // убираем игрока со сцены
             Destroy(GameObject.Find("Character").gameObject);
         }

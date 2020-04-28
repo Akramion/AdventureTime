@@ -16,4 +16,9 @@ public class ScoreController : MonoBehaviour
         score++;
         scoreComponent.text = score.ToString();
     }
+
+    public void ResetScore() {
+        score = 0;
+        scoreComponent.text = score.ToString();
+    }
 }
