@@ -27,6 +27,8 @@ public class SceneController : MonoBehaviour
 
     private GameObject person;
 
+    ScoreController score;
+
     
 
 
@@ -37,6 +39,7 @@ public class SceneController : MonoBehaviour
         alphaImageTransition = alphaObjTransition.GetComponent<Image>();
         alphaImageNextLevel = alphaObjNextLevel.GetComponent<Image>();
         alphaImageRestart = alphaObjRestart.GetComponent<Image>();
+        score = GameObject.Find("Score").GetComponent<ScoreController>();
     }
 
     private void Update() {
@@ -51,6 +54,7 @@ public class SceneController : MonoBehaviour
 
     public void NextLevel() {
         level++;
+        score.ResetScore();
         blackoutCanvas.SetActive(false);
         if (isHard)
         {
@@ -66,6 +70,7 @@ public class SceneController : MonoBehaviour
 
     public void RestartLevel() {
         blackoutCanvas.SetActive(false);
+        score.ResetScore();
         if (isHard)
         {
             SceneManager.LoadScene("Level_Hard_" + level, LoadSceneMode.Single);

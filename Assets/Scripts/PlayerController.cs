@@ -8,7 +8,7 @@ public class PlayerController : MonoBehaviour
     public float acceleration = 5f;
     public float jumpForce = 5f;
 
-    private bool isJump = false;
+    private bool isJump = true;
 
     private Animator animator;
 
@@ -21,6 +21,9 @@ public class PlayerController : MonoBehaviour
     private Vector3 outsidePlayer;
     private SceneController sceneController;
     private CanvasDontDestroy canvasDontDestroy;
+
+    SoundManager soundManager;
+
 
     
 
@@ -37,7 +40,7 @@ public class PlayerController : MonoBehaviour
     private void Start() {
         canvasDontDestroy = GameObject.Find("BlackoutCanvas").GetComponent<CanvasDontDestroy>();
         canvasDontDestroy.CameraAttach();
-        
+        soundManager = FindObjectOfType<SoundManager>();
         
     }
 
@@ -47,11 +50,17 @@ public class PlayerController : MonoBehaviour
         }     
 
         Vector3 outsidePlayer = camera.WorldToViewportPoint(transform.position);
+
+        // Смерть от падения вниз
         if(outsidePlayer.y < 0f) {
+
+            // Звук смерти от падения
+            soundManager.Play("fallingDeath");
+
             sceneController.RestartLevel();
         }
 
-// Animations
+        // Animations
         if(movement == 0) {
             animator.SetBool("isWalk", false);
         }
@@ -90,6 +99,8 @@ public class PlayerController : MonoBehaviour
     }
 
     private void AirControl() {
+        soundManager.StopSound("movement");
+
         movement = Input.GetAxis("Horizontal");
         Vector2 movementVec = new Vector2(movement, 0f);
         rigidbody.AddForce(movementVec * acceleration);
@@ -106,6 +117,7 @@ public class PlayerController : MonoBehaviour
             rigidbody.velocity = vectorClamp;
         }
 
+        // Поворот спрайта
         if (movement > 0 && !m_FacingRight)
         {
             Flip();
@@ -120,9 +132,22 @@ public class PlayerController : MonoBehaviour
         movement = Input.GetAxis("Horizontal");
         Vector2 movementVec = new Vector2(movement, 0f);
         Vector2 currentVelocity = rigidbody.velocity;
+
         currentVelocity.x = movementVec.x * moveSpeed;
         rigidbody.velocity = currentVelocity;
+        
+        
+        // Звук передвижения
+        if(movement != 0) {
+            soundManager.PlayOneShot("movement");
+        }
 
+        else {
+            soundManager.StopSound("movement");
+        }
+
+
+        // Поворот спрайта
         if (movement > 0 && !m_FacingRight)
         {
             Flip();
@@ -136,6 +161,10 @@ public class PlayerController : MonoBehaviour
     private void Jump()
     {
         if(grounded.isGrounded == true) {
+            // Выключения звука передвижения
+            soundManager.StopSound("movement");
+            
+            soundManager.Play("jump");
             rigidbody.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
             isJump = true;
         }

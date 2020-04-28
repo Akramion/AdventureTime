@@ -15,6 +15,9 @@ public class NextLevelTrigger : MonoBehaviour
         if(collider.tag == "Player") {
             sceneController.TurnOfButtons();
             sceneController.SetBlackot();
+
+            // Выключения звука передвижения в конце уровня
+            FindObjectOfType<SoundManager>().StopSound("movement");
         }
     }
 }
