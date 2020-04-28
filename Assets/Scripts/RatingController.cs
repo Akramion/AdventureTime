@@ -9,10 +9,7 @@ public class RatingController : MonoBehaviour
     [SerializeField]
     private string fileName;
 
-    public static int easyLevelsCount = 10;
-    public static int levels = 20;
-
-    public string curPlayerName = "Nosik";
+    public string curPlayerName = "Аноним";
     public bool recalculateTable = true;
 
     // отсортированные записи таблицы рейтинга
@@ -25,9 +22,9 @@ public class RatingController : MonoBehaviour
 
         public RecordData()
         {
-            levelScores = new float[levels];
+            levelScores = new float[SceneController.totalLevelsCount];
 
-            for (int i = 0; i < levels; ++i)
+            for (int i = 0; i < SceneController.totalLevelsCount; ++i)
             {
                 levelScores[i] = 0;
             }
@@ -68,30 +65,10 @@ public class RatingController : MonoBehaviour
     // подгружаем рейтинг из файла перед началом игры
     public void Awake()
     {
+        SceneController sceneController = GetComponent<SceneController>();
         LoadFromFile();
-        AddPlayer("CR@zy d0g");
-        AddPlayer("Sobaka228");
-        AddPlayer("Nosik");
-        AddPlayer("Bobil");
-        AddPlayer("Keny");
-        AddPlayer("Shushkan");
-        AddPlayer("Ruport");
-        AddPlayer("Jiga");
-
-        RecalculateRating(1, "CR@zy d0g", 100);
-        RecalculateRating(4, "CR@zy d0g", 50);
-        RecalculateRating(1, "Sobaka228", 100);
-        RecalculateRating(2, "Sobaka228", 40);
-        RecalculateRating(1, "Nosik", 100);
-        RecalculateRating(2, "Nosik", 30);
-        RecalculateRating(1, "Bobil", 100);
-        RecalculateRating(2, "Bobil", 20);
-        RecalculateRating(1, "Keny", 100);
-        RecalculateRating(2, "Keny", 10);
-        RecalculateRating(1, "Shushkan", 50);
-        RecalculateRating(2, "Shushkan", 20);
-
-        SaveToFile();
+        // добавляем анонимного игрока
+        AddPlayer("Аноним");
     }
 
     public bool AddPlayer(string playerName)
@@ -167,7 +144,7 @@ public class RatingController : MonoBehaviour
                 string playerName = data[0];
 
                 string[] unparsedLevelScores = data[1].Split(' ');
-                float[] levelScores = new float[levels];
+                float[] levelScores = new float[SceneController.totalLevelsCount];
 
                 for (int i = 0; i < unparsedLevelScores.Length; i++)
                 {
@@ -187,6 +164,10 @@ public class RatingController : MonoBehaviour
 
         foreach (string playerName in rating.Keys)
         {
+            // исключаем анонимного игрока из процесса сохранения
+            if (playerName == "Аноним")
+                continue;
+
             RecordData recordData = rating[playerName] as RecordData;
             saveText += playerName + "|";
             saveText += string.Join(" ", recordData.levelScores);

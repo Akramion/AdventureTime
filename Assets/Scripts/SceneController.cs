@@ -9,49 +9,55 @@ public class SceneController : MonoBehaviour
     public int level = 0;
     public bool isHard = false;
 
-    private GameObject blackoutCanvas;
+    [SerializeField]
+    private GameObject transitionCanvas;
 
-    private bool isBlackout = false;
-    public GameObject alphaObjBlackout;
-    private Image alphaImageBlackout;
-    private float alphaABlackout;
+    [SerializeField]
+    private GameObject gameCanvas;
 
-    public GameObject alphaObjTransition;
-    private Image alphaImageTransition;
-    private float alphaATransition;
+    public static int easyLevelsCount = 10;
+    public static int hardLevelsCount = 10;
+    public static int totalLevelsCount = easyLevelsCount + hardLevelsCount;
 
-    public GameObject alphaObjRestart;
-    private Image alphaImageRestart;
-    public GameObject alphaObjNextLevel;
-    private Image alphaImageNextLevel;
-
-    private GameObject person;
-
-    
-
-
-    private void Awake() {
+    private void Awake()
+    {
         DontDestroyOnLoad(this);
-        blackoutCanvas = GameObject.Find("Transition");
-        alphaImageBlackout = alphaObjBlackout.GetComponent<Image>();
-        alphaImageTransition = alphaObjTransition.GetComponent<Image>();
-        alphaImageNextLevel = alphaObjNextLevel.GetComponent<Image>();
-        alphaImageRestart = alphaObjRestart.GetComponent<Image>();
+
+        // чтобы предотвратить размножение ковасов при повторном переходе на меню,
+        // уберем их из иерархии и создатим здесь, используя их префаб
+        gameCanvas = Instantiate(gameCanvas);
+        gameCanvas.name = "GameCanvas";
+        transitionCanvas = Instantiate(transitionCanvas);
+        transitionCanvas.name = "TransitionCanvas";
+
+        DontDestroyOnLoad(gameCanvas);
+        DontDestroyOnLoad(transitionCanvas);
     }
 
-    private void Update() {
-        if(isBlackout == true) {
-            Blackout();
+    public void NextLevel()
+    {
+        // мы переходим в меню, если все уровни в той или иной сложности (легкой или сложной) пройдены
+        if ((isHard && (level == hardLevelsCount)) || (!isHard && (level == easyLevelsCount)))
+        {
+            level = 0;
+            SceneManager.LoadScene("Menu");
         }
-
-        else {
-            UnsetBlackout();
+        else
+        // если уровни остались, то переходим на следующий
+        {
+            level++;
+            LoadCurrentLevel();
         }
     }
 
-    public void NextLevel() {
-        level++;
-        blackoutCanvas.SetActive(false);
+    public void LoadCurrentLevel()
+    {
+        // выключаем панели с кнопками при переходе
+        transitionCanvas.SetActive(false);
+
+        // если канвас со счетом не включен, то включаем его
+        gameCanvas.SetActive(true);
+
         if (isHard)
         {
             SceneManager.LoadScene("Level_Hard_" + level, LoadSceneMode.Single);
@@ -60,22 +66,11 @@ public class SceneController : MonoBehaviour
         {
             SceneManager.LoadScene("Level_Easy_" + level, LoadSceneMode.Single);
         }
-
-        isBlackout = false;
     }
 
-    public void RestartLevel() {
-        blackoutCanvas.SetActive(false);
-        if (isHard)
-        {
-            SceneManager.LoadScene("Level_Hard_" + level, LoadSceneMode.Single);
-        }
-        else
-        {
-            SceneManager.LoadScene("Level_Easy_" + level, LoadSceneMode.Single);
-        }
-
-        isBlackout = false;
+    public void OpenTransitionPanel()
+    {
+        transitionCanvas.SetActive(true);
     }
 
     public void SetLevel(int levelIndex)
@@ -83,62 +78,8 @@ public class SceneController : MonoBehaviour
         level = levelIndex;
     }
 
-    public void SetDificulty(bool isHard)
+    public void SetDifficulty(bool isHard)
     {
         this.isHard = isHard;
-    }
-
-    public void TurnOfButtons() {
-        blackoutCanvas.SetActive(true);
-    }
-
-    public void SetBlackot() {
-        isBlackout = !isBlackout;
-        
-        if(isBlackout == true){
-            DestroyPerson();
-        }   
-     }
-
-    private void UnsetBlackout() {
-        alphaABlackout = 0f;
-        alphaATransition = 0f;
-        alphaImageTransition.color = new Color(alphaImageTransition.color.r, alphaImageTransition.color.g, alphaImageTransition.color.b, alphaABlackout);
-        alphaImageNextLevel.color = new Color(alphaImageNextLevel.color.r, alphaImageNextLevel.color.g, alphaImageNextLevel.color.b, alphaABlackout);
-        alphaImageRestart.color = new Color(alphaImageRestart.color.r, alphaImageRestart.color.g, alphaImageRestart.color.b, alphaABlackout);
-        alphaImageBlackout.color = new Color(alphaImageBlackout.color.r, alphaImageBlackout.color.g, alphaImageBlackout.color.b, alphaABlackout);
-    }
-
-    private void DestroyPerson() {
-        person = GameObject.Find("Character").gameObject;
-        Destroy(person);
-    }
-
-    public void BlackoutSetActive() {
-        alphaObjBlackout.SetActive(true);
-    }
-
-    private void Blackout() {
-        
-        if(alphaABlackout < 0.7f) {
-            alphaABlackout += 0.7f * Time.deltaTime;
-            alphaImageBlackout.color = new Color(alphaImageBlackout.color.r, alphaImageBlackout.color.g, alphaImageBlackout.color.b, alphaABlackout);
-        }
-
-        if(alphaABlackout > 0.7f) {
-            ShowTransition();
-        }
-    }
-
-    private void ShowTransition() {
-        Debug.Log("asd");
-        if(alphaATransition < 1) {
-            alphaATransition += 0.7f * Time.deltaTime;
-
-
-            alphaImageTransition.color = new Color(alphaImageTransition.color.r, alphaImageTransition.color.g, alphaImageTransition.color.b, alphaATransition);
-            alphaImageNextLevel.color = new Color(alphaImageNextLevel.color.r, alphaImageNextLevel.color.g, alphaImageNextLevel.color.b, alphaATransition);
-            alphaImageRestart.color = new Color(alphaImageRestart.color.r, alphaImageRestart.color.g, alphaImageRestart.color.b, alphaATransition);
-        }        
     }
 }

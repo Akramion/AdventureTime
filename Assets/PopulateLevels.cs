@@ -29,8 +29,8 @@ public class PopulateLevels : MonoBehaviour
         float[] levelScores = ((RatingController.RecordData)
             ratingController.rating[ratingController.curPlayerName]).levelScores;
 
-        int start = isHard ? RatingController.easyLevelsCount : 0;
-        int end = isHard ? RatingController.levels: RatingController.easyLevelsCount;
+        int start = isHard ? SceneController.easyLevelsCount : 0;
+        int end = isHard ? SceneController.totalLevelsCount : SceneController.easyLevelsCount;
 
         for (int i = start, j=1; i < end; i++, j++)
         {

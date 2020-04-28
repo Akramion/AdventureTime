@@ -20,9 +20,6 @@ public class PlayerController : MonoBehaviour
     private Camera camera;
     private Vector3 outsidePlayer;
     private SceneController sceneController;
-    private CanvasDontDestroy canvasDontDestroy;
-
-    
 
     private void Awake() {
         rigidbody = gameObject.GetComponent<Rigidbody2D>();
@@ -31,14 +28,6 @@ public class PlayerController : MonoBehaviour
 
         camera = GameObject.Find("Main Camera").gameObject.GetComponent<Camera>();
         sceneController = GameObject.Find("SceneController").GetComponent<SceneController>();
-        
-    }
-
-    private void Start() {
-        canvasDontDestroy = GameObject.Find("BlackoutCanvas").GetComponent<CanvasDontDestroy>();
-        canvasDontDestroy.CameraAttach();
-        
-        
     }
 
     private void Update() {
@@ -48,10 +37,10 @@ public class PlayerController : MonoBehaviour
 
         Vector3 outsidePlayer = camera.WorldToViewportPoint(transform.position);
         if(outsidePlayer.y < 0f) {
-            sceneController.RestartLevel();
+            sceneController.LoadCurrentLevel();
         }
 
-// Animations
+        // Animations
         if(movement == 0) {
             animator.SetBool("isWalk", false);
         }
