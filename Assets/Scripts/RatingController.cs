@@ -65,7 +65,6 @@ public class RatingController : MonoBehaviour
             // если не проходили этот уровень
             if (oldScore == 0)
             {
-                Debug.Log("new");
                 // прибавим к общему количеству заработанные очки
                 totalScore += score;
 
@@ -98,17 +97,17 @@ public class RatingController : MonoBehaviour
     // подгружаем рейтинг из файла перед началом игры
     public void Awake()
     {
-        AddPlayer("Вася");
-        AddPlayer("Ваня");
+        //AddPlayer("Вася");
+        //AddPlayer("Ваня");
 
-        ChangeLevelScore(true, 0, "Вася", 10);
-        ChangeLevelScore(true, 0, "Ваня", 5);
+        //ChangeLevelScore(true, 0, "Вася", 10);
+        //ChangeLevelScore(true, 0, "Ваня", 5);
 
-        ChangeLevelScore(true, 1, "Вася", 10);
-        ChangeLevelScore(true, 1, "Ваня", 10);
+        //ChangeLevelScore(true, 1, "Вася", 10);
+        //ChangeLevelScore(true, 1, "Ваня", 10);
 
-        ChangeLevelScore(false, 0, "Вася", 5);
-        ChangeLevelScore(false, 0, "Ваня", 10);
+        //ChangeLevelScore(false, 0, "Вася", 5);
+        //ChangeLevelScore(false, 0, "Ваня", 10);
 
         SceneController sceneController = GetComponent<SceneController>();
         // LoadFromFile();
@@ -156,8 +155,9 @@ public class RatingController : MonoBehaviour
 
                 // найдена запись выше по рейтингу, которая имеет меньше очков
                 // запомним индекс, на который позже встанем
-                if (curProgress.levelsPassed >= otherProgress.levelsPassed &&
-                    curProgress.totalScore < otherProgress.totalScore)
+                if (curProgress.levelsPassed == otherProgress.levelsPassed &&
+                    curProgress.totalScore < otherProgress.totalScore ||
+                    curProgress.levelsPassed > otherProgress.levelsPassed)
                 {
                     insertIndex = i;
                     break;

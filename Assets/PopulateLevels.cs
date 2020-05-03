@@ -10,6 +10,7 @@ public class PopulateLevels : MonoBehaviour
 {
     [SerializeField]
     private bool isHard;
+    private string levelType;
 
     [SerializeField]
     private GameObject levelInfoPrefab;
@@ -19,11 +20,20 @@ public class PopulateLevels : MonoBehaviour
 
     private RatingController ratingController;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
         ratingController = GameObject.Find("SceneController").GetComponent<RatingController>();
-        string levelType = isHard ? "Hard" : "Easy";
+        levelType = isHard ? "Hard" : "Easy";
+    }
+
+    // Start is called before the first frame update
+    void OnEnable()
+    {
+        // удаляем предыдущие уровни
+        foreach (Transform child in transform)
+        {
+            Destroy(child.gameObject);
+        }
 
         OrderedDictionary curRating = isHard ? ratingController.hardRating : ratingController.easyRating;
 
@@ -39,23 +49,31 @@ public class PopulateLevels : MonoBehaviour
             Text levelText = levelInfo.transform.Find("LevelButton/Text").GetComponent<Text>();
             levelText.text = (i + 1).ToString();
 
+            // пройденные уровни - показываем счет, активируем кнопку
+            // промежуточные уровни (доступен, но еще не был пройден) - активируем кнопку
+            // не пройденные - деактивируем кнопку
+
             // мы должны проходить уровни по порядку, поэтому сделаем неактивными кнопки закрытых уровней
             if (i > levelProgress.levelsPassed)
             {
                 Button b = levelInfo.transform.Find("LevelButton").GetComponent<Button>();
                 b.interactable = false;
             }
-            // для пройденных же активируем кнопку и покажем полученные очки
-            else
+            // для пройденных покажем полученные очки.
+            if (i < levelProgress.levelsPassed)
             {
                 // очки
                 float levelScore = levelProgress.levelScores[i];
-                
-                Transform starsContainer = levelInfo.transform.Find("StarsContainer");
-                for (int starIndex = 0; starIndex < Math.Ceiling(levelScore / 25.0); starIndex++)
-                {
-                    Instantiate(starPrefab, starsContainer);
-                }
+
+                // время прохождения
+                Text timeText = levelInfo.transform.Find("InfoContainer/TimeText").GetComponent<Text>();
+                timeText.text = levelScore.ToString() + " сек.";
+
+                //Transform starsContainer = levelInfo.transform.Find("StarsContainer");
+                //for (int starIndex = 0; starIndex < Math.Ceiling(levelScore / 25.0); starIndex++)
+                //{
+                //Instantiate(starPrefab, starsContainer);
+                //}
             }
         }
     }

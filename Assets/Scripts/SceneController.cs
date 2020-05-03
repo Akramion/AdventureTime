@@ -12,16 +12,32 @@ public class SceneController : MonoBehaviour
 
     [SerializeField]
     private GameObject transitionCanvas;
-
     [SerializeField]
     private GameObject gameCanvas;
+    [SerializeField]
+    private GameObject soundManager;
+
+    private RatingController ratingController;
 
     public const int easyLevelsCount = 10;
     public const int hardLevelsCount = 10;
     public const int totalLevelsCount = easyLevelsCount + hardLevelsCount;
 
+    private static SceneController singleton;
+
     private void Awake()
     {
+        // предотвращаем дублирование менеджера сцен при переходе на меню
+        if (singleton)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        else
+        {
+            singleton = this;
+        }
+
         DontDestroyOnLoad(this);
 
         // чтобы предотвратить размножение ковасов при повторном переходе на меню,
@@ -30,6 +46,10 @@ public class SceneController : MonoBehaviour
         gameCanvas.name = "GameCanvas";
         transitionCanvas = Instantiate(transitionCanvas);
         transitionCanvas.name = "TransitionCanvas";
+        soundManager = Instantiate(soundManager);
+        soundManager.name = "SoundManager";
+
+        ratingController = GetComponent<RatingController>();
 
         DontDestroyOnLoad(gameCanvas);
         DontDestroyOnLoad(transitionCanvas);
@@ -37,12 +57,10 @@ public class SceneController : MonoBehaviour
 
     public void NextLevel()
     {
-
         // мы переходим в меню, если все уровни в той или иной сложности (легкой или сложной) пройдены
         if ((isHard && (level == hardLevelsCount)) || (!isHard && (level == easyLevelsCount)))
         {
-            level = 0;
-            SceneManager.LoadScene("Menu");
+            LoadMenu();
         }
         else
         // если уровни остались, то переходим на следующий
@@ -72,6 +90,16 @@ public class SceneController : MonoBehaviour
         }
     }
 
+    public void LoadMenu()
+    {
+        // выключаем все игровые канвасы
+        transitionCanvas.SetActive(false);
+        gameCanvas.SetActive(false);
+
+        level = 0;
+        SceneManager.LoadScene("Menu");
+    }
+
     public void OpenTransitionPanel()
     {
         transitionCanvas.SetActive(true);
@@ -85,18 +113,29 @@ public class SceneController : MonoBehaviour
         gameCanvas.SetActive(false);
     }
 
-    public void ShowScore() {
-        ScoreController  scoreController = GameObject.Find("Score").GetComponent<ScoreController>();
-        Text scoreOutput = GameObject.Find("CoinsText").GetComponent<Text>();
-        string currentScore = "Собрано очков: " + scoreController.score;
+    public void ShowScore()
+    {
+        ScoreController scoreController = gameCanvas.transform.Find("GamePanel/Score").GetComponent<ScoreController>();
+        Text scoreOutput = transitionCanvas.transform.Find("TransitionPanel/CoinsText").GetComponent<Text>();
+
+        // записываем очки
+        string currentScore = "Собрано вишенок: " + scoreController.score;
         scoreOutput.text = currentScore;
     }
 
-    public void ShowTime() {
-        Text timeOuput = GameObject.Find("TimeText").GetComponent<Text>();
-        string currentTime = "Время: " + Math.Round(Time.timeSinceLevelLoad, 3).ToString() + "c";
-        timeOuput.text = currentTime;
+    public void ShowTime()
+    {
+        // получаем время похождения уровня
+        float levelTime = (float) Math.Round(Time.timeSinceLevelLoad, 3);
+        // меняем рейтинг для текущего уровня
+        ratingController.ChangeLevelScore(isHard, level - 1, ratingController.curPlayerName, levelTime);
+
+        // выводим время прохождения
+        Text timeOutput = transitionCanvas.transform.Find("TransitionPanel/TimeText").GetComponent<Text>();
+        string currentTime = "Время: " + levelTime.ToString() + " сек.";
+        timeOutput.text = currentTime;
     }
+
     public void SetLevel(int levelIndex)
     {
         level = levelIndex;

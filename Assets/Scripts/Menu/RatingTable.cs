@@ -30,7 +30,7 @@ public class RatingTable : MonoBehaviour
         // чистим таблицу
         ClearTable();
 
-        OrderedDictionary curRating = fillWithHard ? ratingController.easyRating : ratingController.hardRating;
+        OrderedDictionary curRating = fillWithHard ? ratingController.hardRating : ratingController.easyRating;
 
         float[] levelScores = ((RatingController.LevelProgress)
             curRating[ratingController.curPlayerName]).levelScores;
