@@ -16,9 +16,9 @@ public class SceneController : MonoBehaviour
     [SerializeField]
     private GameObject gameCanvas;
 
-    public static int easyLevelsCount = 10;
-    public static int hardLevelsCount = 10;
-    public static int totalLevelsCount = easyLevelsCount + hardLevelsCount;
+    public const int easyLevelsCount = 10;
+    public const int hardLevelsCount = 10;
+    public const int totalLevelsCount = easyLevelsCount + hardLevelsCount;
 
     private void Awake()
     {

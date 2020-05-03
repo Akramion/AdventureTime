@@ -12,45 +12,78 @@ public class RatingController : MonoBehaviour
     public string curPlayerName = "Аноним";
     public bool recalculateTable = true;
 
-    // отсортированные записи таблицы рейтинга
-    public OrderedDictionary rating = new OrderedDictionary();
+    // отсортированный рейтинг
+    // 2 вида: легий и сложный. Разделены для объективности оценки
+    public OrderedDictionary easyRating = new OrderedDictionary();
+    public OrderedDictionary hardRating = new OrderedDictionary();
 
-    public class RecordData
+    // класс, содержащий прогресс игрока по какому-либо рейтингу (легкому или сложному)
+    public class LevelProgress
     {
+        // время, за которое игрок прошел уровень. Если 0, то не проходил.
         public float[] levelScores;
         public float totalScore;
 
-        public RecordData()
-        {
-            levelScores = new float[SceneController.totalLevelsCount];
+        // количество пройденных уровней
+        public int levelsPassed;
 
-            for (int i = 0; i < SceneController.totalLevelsCount; ++i)
+        // этот конструктор нужен, чтобы инициализировать пустой прогресс
+        public LevelProgress(int levelCount)
+        {
+            levelScores = new float[levelCount];
+
+            for (int i = 0; i < levelCount; ++i)
             {
                 levelScores[i] = 0;
             }
 
             totalScore = 0;
+            levelsPassed = 0;
         }
 
-        public RecordData(float[] levelScores)
+        // этот конструктор нужен, чтобы инициализировать прогресс на основе массива
+        public LevelProgress(float[] levelScores)
         {
             this.levelScores = levelScores;
 
             totalScore = 0;
-            foreach (float levelScore in levelScores)
+            for (int i = 0; i < levelScores.Length; i++)
             {
-                totalScore += levelScore;
+                float levelScore = levelScores[i];
+                if (levelScore > 0)
+                {
+                    levelsPassed++;
+                    totalScore += levelScore;
+                }
             }
         }
 
         public bool ChangeLevelScore(int levelIndex, float score)
         {
-            // меняем очки только если их больше, чем старых
-            if (score > levelScores[levelIndex])
+            float oldScore = levelScores[levelIndex];
+            
+            // если не проходили этот уровень
+            if (oldScore == 0)
             {
+                Debug.Log("new");
+                // прибавим к общему количеству заработанные очки
+                totalScore += score;
+
+                // для конкретного уровня меняем очки
+                levelScores[levelIndex] = score;
+
+                // Добавим 1 к общему количеству пройденных уровней, чтобы в меню открылся новый уровень
+                levelsPassed++;
+                return true;
+            }
+            else
+            // Если проходили, то меняем очки только если их меньше, чем старых
+            if (score < oldScore)
+            {
+                Debug.Log("old");
                 // вычитаем старые очки суммы всех очков, тем самым обнуляя долю текущего уровня
                 // затем добавляем новые очки (обновляем)
-                totalScore += score - levelScores[levelIndex];
+                totalScore += score - oldScore;
 
                 // для конкретного уровня меняем очки
                 levelScores[levelIndex] = score;
@@ -61,39 +94,60 @@ public class RatingController : MonoBehaviour
             return false;
         }
     }
-
+    
     // подгружаем рейтинг из файла перед началом игры
     public void Awake()
     {
+        AddPlayer("Вася");
+        AddPlayer("Ваня");
+
+        ChangeLevelScore(true, 0, "Вася", 10);
+        ChangeLevelScore(true, 0, "Ваня", 5);
+
+        ChangeLevelScore(true, 1, "Вася", 10);
+        ChangeLevelScore(true, 1, "Ваня", 10);
+
+        ChangeLevelScore(false, 0, "Вася", 5);
+        ChangeLevelScore(false, 0, "Ваня", 10);
+
         SceneController sceneController = GetComponent<SceneController>();
-        LoadFromFile();
+        // LoadFromFile();
         // добавляем анонимного игрока
         AddPlayer("Аноним");
     }
 
     public bool AddPlayer(string playerName)
     {
-        if (rating.Contains(playerName))
+        // достаточно проверить наличия игрока только в одном из рейтингов, чтобы убедиться,
+        // что он есть или его нет в другом
+        if (easyRating.Contains(playerName))
             return false;
 
-        rating.Add(playerName, new RecordData());
+        // создаем разные прогрессы для разных типов уровней
+        easyRating.Add(playerName, new LevelProgress(SceneController.easyLevelsCount));
+        hardRating.Add(playerName, new LevelProgress(SceneController.hardLevelsCount));
+
         recalculateTable = true;
         return true;
     }
 
-    public void RecalculateRating(int levelIndex, string playerName, float levelScore)
+    public void ChangeLevelScore(bool isHard, int levelIndex, string playerName, float levelScore)
     {
-        RecordData updatedRecord = rating[playerName] as RecordData;
-        bool isChanged = updatedRecord.ChangeLevelScore(levelIndex, levelScore);
+        // выбираем нужный для изменения рейтинг
+        OrderedDictionary curRating = isHard ? hardRating : easyRating;
+
+        LevelProgress curProgress = curRating[playerName] as LevelProgress;
+        bool isChanged = curProgress.ChangeLevelScore(levelIndex, levelScore);
 
         // если новые очки оказались больше старых, то нужно пересчитать таблицу рейтинга
         if (isChanged)
         {
             int insertIndex = -1;
             int i = 0;
-            foreach (string curPlayerName in rating.Keys)
+
+            foreach (string curPlayerName in curRating.Keys)
             {
-                RecordData curRecord = rating[i] as RecordData;
+                LevelProgress otherProgress = curRating[i] as LevelProgress;
 
                 // если игрок встречается в проверке, то это означает, что
                 // после изменения очков он не улучшил положение в рейтинге
@@ -102,7 +156,8 @@ public class RatingController : MonoBehaviour
 
                 // найдена запись выше по рейтингу, которая имеет меньше очков
                 // запомним индекс, на который позже встанем
-                if (curRecord.totalScore < updatedRecord.totalScore)
+                if (curProgress.levelsPassed >= otherProgress.levelsPassed &&
+                    curProgress.totalScore < otherProgress.totalScore)
                 {
                     insertIndex = i;
                     break;
@@ -115,9 +170,9 @@ public class RatingController : MonoBehaviour
             if (insertIndex != -1)
             {
                 // уберем его со старой позиции
-                rating.Remove(playerName);
+                curRating.Remove(playerName);
                 // перенесем данные на новую позицию в рейтинге
-                rating.Insert(insertIndex, playerName, updatedRecord);
+                curRating.Insert(insertIndex, playerName, curProgress);
                 recalculateTable = true;
             }
         }
@@ -125,7 +180,8 @@ public class RatingController : MonoBehaviour
 
     public void Clear()
     {
-        rating.Clear();
+        easyRating.Clear();
+        hardRating.Clear();
     }
 
     private void LoadFromFile()
@@ -144,14 +200,22 @@ public class RatingController : MonoBehaviour
                 string playerName = data[0];
 
                 string[] unparsedLevelScores = data[1].Split(' ');
-                float[] levelScores = new float[SceneController.totalLevelsCount];
 
-                for (int i = 0; i < unparsedLevelScores.Length; i++)
+                // из общего количества уровней сначала идут легкие
+                float[] levelScores = new float[SceneController.easyLevelsCount];
+                for (int i = 0, j = 0; i < SceneController.easyLevelsCount; i++, j++)
                 {
-                    levelScores[i] = float.Parse(unparsedLevelScores[i]);
+                    levelScores[j] = float.Parse(unparsedLevelScores[i]);
                 }
+                easyRating.Add(playerName, new LevelProgress(levelScores));
 
-                rating.Add(playerName, new RecordData(levelScores));
+                // потом сложные
+                levelScores = new float[SceneController.hardLevelsCount];
+                for (int i = SceneController.hardLevelsCount, j = 0; i < SceneController.totalLevelsCount; i++, j++)
+                {
+                    levelScores[j] = float.Parse(unparsedLevelScores[i]);
+                }
+                hardRating.Add(playerName, new LevelProgress(levelScores));
             }
         }
     }
@@ -162,15 +226,19 @@ public class RatingController : MonoBehaviour
 
         string saveText = "";
 
-        foreach (string playerName in rating.Keys)
+        foreach (string playerName in easyRating.Keys)
         {
             // исключаем анонимного игрока из процесса сохранения
             if (playerName == "Аноним")
                 continue;
 
-            RecordData recordData = rating[playerName] as RecordData;
+            // сначала заполняем легкими уровнями, потом сложными
+            LevelProgress easyProgress = easyRating[playerName] as LevelProgress;
+            LevelProgress hardProgress = hardRating[playerName] as LevelProgress;
+
             saveText += playerName + "|";
-            saveText += string.Join(" ", recordData.levelScores);
+            saveText += string.Join(" ", easyProgress.levelScores);
+            saveText += string.Join(" ", hardProgress.levelScores);
             saveText += "\n";
         }
 

@@ -14,6 +14,6 @@ public class UpdateCurrentPlayerText : MonoBehaviour
 
     void OnEnable()
     {
-        text.text = "Сейчас играет " + ratingController.curPlayerName;
+        text.text = "Удачи, " + ratingController.curPlayerName + "!";
     }
 }

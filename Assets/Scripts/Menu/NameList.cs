@@ -22,7 +22,8 @@ public class NameList : MonoBehaviour
 
     public void FillNameList()
     {
-        foreach (string playerName in ratingController.rating.Keys)
+        // можно брать имена из любого рейтинга, они оба содеражат одинаковые имена
+        foreach (string playerName in ratingController.easyRating.Keys)
         {
             GameObject inst = AppendPlayer(playerName);
 
