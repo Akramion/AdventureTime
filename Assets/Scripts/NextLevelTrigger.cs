@@ -6,6 +6,7 @@ public class NextLevelTrigger : MonoBehaviour
 {
     private void OnTriggerEnter2D(Collider2D collider) {
         if(collider.tag == "Player") {
+            Debug.Log(Time.timeSinceLevelLoad);
             SceneController sceneController = GameObject.Find("SceneController").GetComponent<SceneController>();
             sceneController.OpenTransitionPanel();
 
