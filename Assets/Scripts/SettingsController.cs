@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.UI;
 
 public class SettingsController : MonoBehaviour {
     public AudioMixer audioMixer;
@@ -13,18 +14,7 @@ public class SettingsController : MonoBehaviour {
         audioMixer.SetFloat("MasterVol", Mathf.Log(volume) * 20);
     }
 
-    public void SetButton() {
-        buttonToggle = !buttonToggle;
-    }
-
-    private void Update() {
-        if (Input.anyKey ** buttonToggle == true) {
-    
-            foreach(KeyCode vKey in System.Enum.GetValues(typeof(KeyCode))){
-                if(Input.GetKey(vKey)){
-                    Debug.Log(vKey);
-                }
-            }           
-        }
+    public void ChangeVolumeMusic(float volume) {
+        audioMixer.SetFloat("MusicVol", Mathf.Log(volume) * 20);
     }
 }
