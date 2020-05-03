@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,8 +20,6 @@ public class SceneController : MonoBehaviour
     public const int hardLevelsCount = 10;
     public const int totalLevelsCount = easyLevelsCount + hardLevelsCount;
 
-    private ScoreController score;
-
     private void Awake()
     {
         DontDestroyOnLoad(this);
@@ -34,12 +33,10 @@ public class SceneController : MonoBehaviour
 
         DontDestroyOnLoad(gameCanvas);
         DontDestroyOnLoad(transitionCanvas);
-        // score = GameObject.Find("Score").GetComponent<ScoreController>();
     }
 
     public void NextLevel()
     {
-        // score.ResetScore();
 
         // мы переходим в меню, если все уровни в той или иной сложности (легкой или сложной) пройдены
         if ((isHard && (level == hardLevelsCount)) || (!isHard && (level == easyLevelsCount)))
@@ -63,8 +60,8 @@ public class SceneController : MonoBehaviour
         // если канвас со счетом не включен, то включаем его
         gameCanvas.SetActive(true);
 
-        // score.ResetScore();
-        
+        // Обнуляем очки
+        GameObject.Find("Score").GetComponent<ScoreController>().ResetScore();
         if (isHard)
         {
             SceneManager.LoadScene("Level_Hard_" + level, LoadSceneMode.Single);
@@ -78,8 +75,28 @@ public class SceneController : MonoBehaviour
     public void OpenTransitionPanel()
     {
         transitionCanvas.SetActive(true);
+
+        // Отображение времени
+        ShowTime();
+
+        // Отображение очков
+        ShowScore();
+
+        gameCanvas.SetActive(false);
     }
 
+    public void ShowScore() {
+        ScoreController  scoreController = GameObject.Find("Score").GetComponent<ScoreController>();
+        Text scoreOutput = GameObject.Find("CoinsText").GetComponent<Text>();
+        string currentScore = "Собрано очков: " + scoreController.score;
+        scoreOutput.text = currentScore;
+    }
+
+    public void ShowTime() {
+        Text timeOuput = GameObject.Find("TimeText").GetComponent<Text>();
+        string currentTime = "Время: " + Math.Round(Time.timeSinceLevelLoad, 3).ToString() + "c";
+        timeOuput.text = currentTime;
+    }
     public void SetLevel(int levelIndex)
     {
         level = levelIndex;
