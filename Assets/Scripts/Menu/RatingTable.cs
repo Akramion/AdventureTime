@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using UnityEngine.UI;
 using UnityEngine;
 
@@ -10,6 +11,8 @@ public class RatingTable : MonoBehaviour
 
     [SerializeField]
     private GameObject ratingRecordPrefab;
+
+    private bool isLoadedHard = false;
     
     void Awake()
     {
@@ -19,25 +22,24 @@ public class RatingTable : MonoBehaviour
 
     void OnEnable()
     {
-        FillTable();
+        FillTable(false);
     }
 
-    public void FillTable()
+    public void FillTable(bool fillWithHard)
     {
-        // обновляем таблицу, только когда в рейтинге есть изменения
-        if (!ratingController.recalculateTable)
-            return;
-
-        ratingController.recalculateTable = false;
-
         // чистим таблицу
         ClearTable();
 
+        OrderedDictionary curRating = fillWithHard ? ratingController.easyRating : ratingController.hardRating;
+
+        float[] levelScores = ((RatingController.LevelProgress)
+            curRating[ratingController.curPlayerName]).levelScores;
+
         // заполняем таблицу записями из рейтинга
         int i = 0;
-        foreach (string playerName in ratingController.rating.Keys)
+        foreach (string playerName in curRating.Keys)
         {
-            RatingController.RecordData recordData = ratingController.rating[i] as RatingController.RecordData;
+            RatingController.LevelProgress levelProgress = curRating[i] as RatingController.LevelProgress;
             GameObject tableRecord = Instantiate(ratingRecordPrefab, container);
 
             Text place = tableRecord.transform.Find("Place").GetComponent<Text>();
@@ -46,8 +48,19 @@ public class RatingTable : MonoBehaviour
             Text name = tableRecord.transform.Find("Name").GetComponent<Text>();
             name.text = playerName;
 
-            Text score = tableRecord.transform.Find("Score").GetComponent<Text>();
-            score.text = recordData.totalScore.ToString();
+            Text time= tableRecord.transform.Find("Time").GetComponent<Text>();
+            
+            if (levelProgress.totalScore == 0)
+            {
+                time.text = "?";
+            }
+            else
+            {
+                time.text = levelProgress.totalScore.ToString();
+            }
+
+            Text levels = tableRecord.transform.Find("Levels").GetComponent<Text>();
+            levels.text = levelProgress.levelsPassed.ToString();
 
             i++;
         }
@@ -56,7 +69,6 @@ public class RatingTable : MonoBehaviour
     public void ClearTable()
     {
         // очищаем таблицу
-        Debug.Log(container);
         foreach (Transform child in container)
         {
             Destroy(child.gameObject);
