@@ -110,7 +110,7 @@ public class RatingController : MonoBehaviour
         //ChangeLevelScore(false, 0, "Ваня", 10);
 
         SceneController sceneController = GetComponent<SceneController>();
-        // LoadFromFile();
+        LoadFromFile();
         // добавляем анонимного игрока
         AddPlayer("Аноним");
     }
@@ -237,7 +237,7 @@ public class RatingController : MonoBehaviour
             LevelProgress hardProgress = hardRating[playerName] as LevelProgress;
 
             saveText += playerName + "|";
-            saveText += string.Join(" ", easyProgress.levelScores);
+            saveText += string.Join(" ", easyProgress.levelScores) + " ";
             saveText += string.Join(" ", hardProgress.levelScores);
             saveText += "\n";
         }

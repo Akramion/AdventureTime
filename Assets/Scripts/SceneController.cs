@@ -145,4 +145,9 @@ public class SceneController : MonoBehaviour
     {
         this.isHard = isHard;
     }
+
+    public void Exit()
+    {
+        Application.Quit();
+    }
 }
