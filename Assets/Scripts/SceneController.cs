@@ -17,6 +17,7 @@ public class SceneController : MonoBehaviour
     [SerializeField]
     private GameObject soundManager;
 
+
     private RatingController ratingController;
 
     public const int easyLevelsCount = 10;
@@ -55,6 +56,7 @@ public class SceneController : MonoBehaviour
         DontDestroyOnLoad(transitionCanvas);
     }
 
+
     public void NextLevel()
     {
         // мы переходим в меню, если все уровни в той или иной сложности (легкой или сложной) пройдены
@@ -88,6 +90,7 @@ public class SceneController : MonoBehaviour
         {
             SceneManager.LoadScene("Level_Easy_" + level, LoadSceneMode.Single);
         }
+
     }
 
     public void LoadMenu()
