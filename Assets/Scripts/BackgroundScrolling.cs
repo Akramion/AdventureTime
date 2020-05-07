@@ -10,22 +10,22 @@ public class BackgroundScrolling : MonoBehaviour
     public Vector3 startPosition;
     private float scrollHeight;
 
-    public Sprite[] sprites;
+    private bool changed = false;
+
+    int index;
+
+    SpriteRenderer spriteRenderer;
 
     void Start()
     {
         scrollHeight = Camera.main.orthographicSize * 2;
 
-        SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
         spriteRenderer.size = new Vector2(spriteRenderer.size.x, spriteRenderer.size.y * 2.5f);
 
         startPosition = transform.position;
-
-        int index = Random.Range(0, sprites.Length);
-
-        Debug.Log((int) index);
-        spriteRenderer.sprite = sprites[(int) index];
-
+        
+        spriteRenderer.sprite = GameObject.Find("SceneController").GetComponent<SceneController>().background;
     }
 
     // Update is called once per frame
@@ -37,6 +37,7 @@ public class BackgroundScrolling : MonoBehaviour
         }
 
         transform.position = new Vector3(transform.position.x, transform.position.y - speed, transform.position.z);
+
     }
 
 }

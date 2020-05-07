@@ -44,3 +44,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   level: 0
+  isHard: 0
+  transitionCanvas: {fileID: 0}
+  gameCanvas: {fileID: 0}
+  soundManager: {fileID: 0}
+  sprites:
+  - {fileID: 21300000, guid: 865b37649c3a924458a2b02da86f8a12, type: 3}
+  - {fileID: 21300000, guid: a5787354a075baf41b17ef0e4ddfbc93, type: 3}
+  - {fileID: 21300000, guid: 12114561b6b25c548bd8e682d64a2924, type: 3}
+  - {fileID: 21300000, guid: 14f05bbfdd1def34997ea02cf986512a, type: 3}
+  - {fileID: 21300000, guid: ee519faa3aaa7964099701db560ba5bd, type: 3}
+  background: {fileID: 0}
+  BackgroundIndex: 0

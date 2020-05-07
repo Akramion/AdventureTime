@@ -1,4 +1,4 @@
-﻿using System;
+﻿
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,6 +17,11 @@ public class SceneController : MonoBehaviour
     [SerializeField]
     private GameObject soundManager;
 
+    [SerializeField]
+    private Sprite[] sprites;
+    public Sprite background;
+    private int indexBg = 0;
+
 
     private RatingController ratingController;
 
@@ -25,6 +30,8 @@ public class SceneController : MonoBehaviour
     public const int totalLevelsCount = easyLevelsCount + hardLevelsCount;
 
     private static SceneController singleton;
+
+    public int BackgroundIndex;
 
     private void Awake()
     {
@@ -54,6 +61,8 @@ public class SceneController : MonoBehaviour
 
         DontDestroyOnLoad(gameCanvas);
         DontDestroyOnLoad(transitionCanvas);
+
+        background = sprites[0];  
     }
 
 
@@ -69,6 +78,8 @@ public class SceneController : MonoBehaviour
         {
             level++;
             LoadCurrentLevel();
+
+            ChangeBackground();
         }
     }
 
@@ -129,7 +140,7 @@ public class SceneController : MonoBehaviour
     public void ShowTime()
     {
         // получаем время похождения уровня
-        float levelTime = (float) Math.Round(Time.timeSinceLevelLoad, 3);
+        float levelTime = (float) System.Math.Round(Time.timeSinceLevelLoad, 3);
         // меняем рейтинг для текущего уровня
         ratingController.ChangeLevelScore(isHard, level - 1, ratingController.curPlayerName, levelTime);
 
@@ -147,5 +158,10 @@ public class SceneController : MonoBehaviour
     public void SetDifficulty(bool isHard)
     {
         this.isHard = isHard;
+    }
+
+    public void ChangeBackground() {
+        indexBg = Random.Range(0, sprites.Length);  
+        background = sprites[indexBg];      
     }
 }
