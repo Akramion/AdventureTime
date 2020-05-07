@@ -112,6 +112,9 @@ public class SceneController : MonoBehaviour
 
         level = 0;
         SceneManager.LoadScene("Menu");
+
+        background = sprites[0];
+
     }
 
     public void OpenTransitionPanel()
@@ -161,10 +164,8 @@ public class SceneController : MonoBehaviour
     }
 
     public void ChangeBackground() {
- 
         indexBg = Random.Range(0, sprites.Length);
         background = sprites[indexBg];
-
 
     }
 
