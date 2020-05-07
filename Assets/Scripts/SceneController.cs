@@ -160,6 +160,14 @@ public class SceneController : MonoBehaviour
         this.isHard = isHard;
     }
 
+    public void ChangeBackground() {
+ 
+        indexBg = Random.Range(0, sprites.Length);
+        background = sprites[indexBg];
+
+
+    }
+
     public void Exit()
     {
         Application.Quit();
