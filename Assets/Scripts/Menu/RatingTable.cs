@@ -12,16 +12,20 @@ public class RatingTable : MonoBehaviour
     [SerializeField]
     private GameObject ratingRecordPrefab;
 
+    private DifficultyButton easyDifficultButton;
+
     private bool isLoadedHard = false;
     
     void Awake()
     {
         ratingController = GameObject.Find("SceneController").GetComponent<RatingController>();
+        easyDifficultButton = transform.Find("DifficultyPanel/EasyRatingButton").GetComponent<DifficultyButton>();
         container = transform.Find("Scroll View/Viewport/Content");
     }
 
     void OnEnable()
     {
+        easyDifficultButton.SetSelected();
         FillTable(false);
     }
 
