@@ -120,10 +120,17 @@ public class PlayerController : MonoBehaviour
     }
 
     private void Movement() {
+
+        // Получаем нажатие кнопок лево и право
         movement = Input.GetAxis("Horizontal");
+
+        // Создаем новый вектор скорости по горизонтали
         Vector2 movementVec = new Vector2(movement, 0f);
+
+        // Получаем скорость перса
         Vector2 currentVelocity = rigidbody.velocity;
 
+        // Присваиваем новую скорость
         currentVelocity.x = movementVec.x * moveSpeed;
         rigidbody.velocity = currentVelocity;
         
@@ -151,11 +158,12 @@ public class PlayerController : MonoBehaviour
 
     private void Jump()
     {
+        // Если перс на земле
         if(grounded.isGrounded == true) {
             // Выключения звука передвижения
             soundManager.StopSound("movement");
-            
             soundManager.Play("jump");
+            
             rigidbody.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
             isJump = true;
         }
